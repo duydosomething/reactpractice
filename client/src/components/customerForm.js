@@ -4,21 +4,12 @@ import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import { Field, reduxForm } from "redux-form";
+import customerField from "./customerField";
+import { postUsers } from "../actions";
+import { connect } from "react-redux";
 
 
-const styles = theme => ({
-  container: {
-    flexWrap: 'wrap'
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-  },
-  menu: {
-    width: 200,
-  },
-});
 
 
 class CustomerForm extends Component {
@@ -29,36 +20,71 @@ class CustomerForm extends Component {
    });
    console.log(this.state);
  };
-render(){
-  const { classes } = this.props;
-  return (
-      <form className={classes.container} noValidate autoComplete="off">
-        <TextField
-          required
-          id="required"
-          label="First Name"
-          margin="normal"
-          className={classes.textField}
-          onChange={this.handleChange("firstName")}
-        />
-        <TextField
-          required
-          id="required"
-          label="Last Name"
-          margin="normal"
-          className={classes.textField}
-          onChange={this.handleChange("lastName")}
-        />
-        <Button mini variant="fab" color="primary" aria-label="Add" className={classes.button}>
+
+
+// render(){
+//   const { classes } = this.props;
+//   return (
+//       <form className={classes.container} noValidate autoComplete="off">
+//         <TextField
+//           required
+//           id="required"
+//           label="First Name"
+//           margin="normal"
+//           className={classes.textField}
+//           onChange={this.handleChange("firstName")}
+//         />
+//         <TextField
+//           required
+//           id="required"
+//           label="Last Name"
+//           margin="normal"
+//           className={classes.textField}
+//           onChange={this.handleChange("lastName")}
+//         />
+//         <Button mini variant="fab" color="primary" aria-label="Add" className={classes.button}>
+//           <AddIcon />
+//         </Button>
+//       </form>
+//     );
+//   }
+// }
+  onSubmit(values){
+    this.props.postUsers(values);
+  }
+  render(){
+    const { handleSubmit } = this.props;
+    return (
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} noValidate autoComplete="off">
+        <Field
+        key="firstName"
+        component={customerField}
+        type="text"
+        label="First Name"
+        name="firstName"/>
+        
+        <Field
+        key="lastName"
+        component={customerField}
+        type="text"
+        label="Last Name"
+        name="lastName"/>
+        <Button mini variant="fab" color="primary" aria-label="Add">
           <AddIcon />
         </Button>
       </form>
-    );
+
+
+    )
   }
 }
 
-CustomerForm.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+// CustomerForm.propTypes = {
+//   classes: PropTypes.object.isRequired
+// };
 
-export default withStyles(styles)(CustomerForm);
+export default reduxForm({
+  form: "customerForm"
+})(
+  connect(null, { postUsers })(CustomerForm)
+);
