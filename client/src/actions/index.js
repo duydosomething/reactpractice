@@ -8,6 +8,5 @@ export const fetchUsers = () => async dispatch => {
 
 export const postUsers = (values) => async dispatch => {
     const res = await axios.post("/api/customers", values);
-    console.log(values);
     dispatch ({ type: FETCH_USERS, payload: res.data});
 }

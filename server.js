@@ -19,7 +19,7 @@ app.get('/api/customers', (req, res) => {
 
 app.post("/api/customers", (req, res) => {
   const { id, firstName, lastName } = req.body;
-  const newUser = {id, userName, firstName};
+  const newUser = {id, firstName, lastName};
   customers.push(newUser);
   res.json(customers);
 })
